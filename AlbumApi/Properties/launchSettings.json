@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/Album/Get",
+      "launchUrl": "api/Album/GetAlbumDetails?UserId=1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "AlbumApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/Album/Get",
+      "launchUrl": "api/Album/GetAlbumDetails?UserID=1",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

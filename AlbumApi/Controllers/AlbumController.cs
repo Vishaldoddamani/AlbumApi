@@ -77,7 +77,7 @@ namespace AlbumApi.Controllers
         /// <param name="UserId">UserId</param>
         /// <returns>List of albums for a particular UserId.</returns>
 
-        [HttpGet("{UserId:int:1}", Name = "GetAlbumDetails")]
+        [HttpGet("{UserId}", Name = "GetAlbumDetails")]
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,7 +99,7 @@ namespace AlbumApi.Controllers
                 {
                     var userAlbums = await _albumService.GetAlbumsAsync(UserId);
 
-                    var mappedAlbum = _mapper.Map<AlbumDetails>(userAlbums);
+                    var mappedAlbum = _mapper.Map<List<AlbumDetails>>(userAlbums);
 
                     if (userAlbums == null)
                     {

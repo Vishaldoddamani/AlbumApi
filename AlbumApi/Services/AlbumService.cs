@@ -18,8 +18,9 @@ namespace AlbumApi.Services
 
         public IMapper _mapper => throw new NotImplementedException();
 
-        public async Task<List<AlbumDetails>> GetAlbumsAsync(int? UserId)
+        public async Task<List<AlbumDetailsDTO>> GetAlbumsAsync(int? UserId)
         {
+            List<AlbumDetailsDTO> userAlbums = null;
             using (var client = new HttpClient())
             {
 
@@ -51,7 +52,7 @@ namespace AlbumApi.Services
                                        PhotoThumbNailUrl = photo.ThumbNailUrl
                                    };
 
-                var userAlbums = albumDetails?.Where(x => x.UserId == UserId).ToList();
+                userAlbums = albumDetails?.Where(x => x.UserId == UserId).ToList();
 
                 // userAlbums = _mapper.Map<List<AlbumDetails>>(userAlbums);
             }
