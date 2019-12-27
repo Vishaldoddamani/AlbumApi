@@ -24,8 +24,8 @@ namespace AlbumApi.Controllers
     {
 
         private readonly ILogger<AlbumController> _logger;
-        public IAlbumService _albumService { get; }
-        public IMapper _mapper { get; }
+        private  IAlbumService _albumService { get; }
+        private IMapper _mapper { get; }
 
         public AlbumController(ILogger<AlbumController> logger, IAlbumService aLbumService, IMapper mapper)
         {
@@ -34,7 +34,7 @@ namespace AlbumApi.Controllers
             _mapper = mapper;
         }
 
- 
+
         //[HttpGet("Get")]
 
         //public async Task<ActionResult<List<Album>>> Get([FromQuery] string UserId)
@@ -99,7 +99,7 @@ namespace AlbumApi.Controllers
                 {
                     var userAlbums = await _albumService.GetAlbumsAsync(UserId);
 
-                    var mappedAlbum = _mapper.Map<List<AlbumDetails>>(userAlbums);
+                    var mappedAlbum = _mapper.Map<List<AlbumDetailsDTO>>(userAlbums);
 
                     if (userAlbums == null)
                     {

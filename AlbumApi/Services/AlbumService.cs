@@ -18,9 +18,9 @@ namespace AlbumApi.Services
 
         public IMapper _mapper => throw new NotImplementedException();
 
-        public async Task<List<AlbumDetailsDTO>> GetAlbumsAsync(int? UserId)
+        public async Task<List<AlbumDetails>> GetAlbumsAsync(int? UserId)
         {
-            List<AlbumDetailsDTO> userAlbums = null;
+            List<AlbumDetails> userAlbums = null;
             using (var client = new HttpClient())
             {
 
@@ -43,7 +43,7 @@ namespace AlbumApi.Services
                 var albumDetails = from album in listAlbum
                                    join photo in listPhotos
                                    on album.Id equals photo.AlbumId
-                                   select new AlbumDetailsDTO
+                                   select new AlbumDetails
                                    {
                                        AlbumTitle = album.Title,
                                        UserId = album.UserId,
@@ -54,7 +54,7 @@ namespace AlbumApi.Services
 
                 userAlbums = albumDetails?.Where(x => x.UserId == UserId).ToList();
 
-                // userAlbums = _mapper.Map<List<AlbumDetails>>(userAlbums);
+               
             }
 
             return userAlbums;

@@ -12,7 +12,7 @@ namespace AlbumApi.Profiles
     {
         public AlbumDetailsProfile()
         {
-            CreateMap<AlbumDetailsDTO, AlbumDetails>();
+            CreateMap<AlbumDetails, AlbumDetailsDTO>();
         }
     }
 }

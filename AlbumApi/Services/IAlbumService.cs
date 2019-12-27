@@ -9,6 +9,6 @@ namespace AlbumApi.Services
     {
         IMapper _mapper { get; }
 
-        Task<List<AlbumDetailsDTO>> GetAlbumsAsync(int? UserId);
+        Task<List<AlbumDetails>> GetAlbumsAsync(int? UserId);
     }
 }
