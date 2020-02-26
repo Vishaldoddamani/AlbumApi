@@ -1,14 +1,12 @@
-using AutoMapper;
-using AlbumApi.Controllers;
+using AlbumApi.Profiles;
 using AlbumApi.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
-using AlbumApi.Profiles;
 
 namespace AlbumApi
 {
@@ -42,7 +40,7 @@ namespace AlbumApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Album Api", Version = "V1" });
-                
+
             })
             ;
 
@@ -57,7 +55,7 @@ namespace AlbumApi
 
             services.AddTransient<IAlbumService, AlbumService>();
 
-    
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
