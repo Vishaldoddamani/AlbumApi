@@ -1,60 +1,78 @@
-﻿using System;
+﻿using AlbumApi.Entities;
+using AlbumApi.Models;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
-using AlbumApi.Entities;
-using AlbumApi.Models;
-using AutoMapper;
-using Newtonsoft.Json;
+
 
 namespace AlbumApi.Services
 {
     public class AlbumService : IAlbumService
     {
-        private readonly List<AlbumDetails> userAlbums;
-        private List<Album> listAlbum;
-        private List<Photo> listPhotos;
+        private readonly ILogger logger;
+        private readonly IHttpClientFactory httpClientFactory;
 
-        public IMapper _mapper => throw new NotImplementedException();
+        public AlbumService(ILogger _logger, IHttpClientFactory httpClientFactory)
+        {
+            logger = _logger;
+            this.httpClientFactory = httpClientFactory;
+        }
 
         public async Task<List<AlbumDetails>> GetAlbumsAsync(int? UserId)
         {
             List<AlbumDetails> userAlbums = null;
-            using (var client = new HttpClient())
+
+            if (UserId == null)
             {
+                throw new ArgumentNullException(nameof(UserId));
+            }
 
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                var clientFactory = httpClientFactory.CreateClient();
 
-                HttpResponseMessage responseAlbums = await client.GetAsync("http://jsonplaceholder.typicode.com/albums");
-
-                HttpResponseMessage responsePhotos = await client.GetAsync("http://jsonplaceholder.typicode.com/photos");
-
+                HttpResponseMessage responseAlbums = await clientFactory.GetAsync("http://jsonplaceholder.typicode.com/albums");
                 responseAlbums.EnsureSuccessStatusCode();
+
+                HttpResponseMessage responsePhotos = await clientFactory.GetAsync("http://jsonplaceholder.typicode.com/photos");
+                responsePhotos.EnsureSuccessStatusCode();
 
                 string albums = await responseAlbums.Content.ReadAsStringAsync();
                 string photos = await responsePhotos.Content.ReadAsStringAsync();
 
-                listAlbum = JsonConvert.DeserializeObject<List<Album>>(albums);
-                listPhotos = JsonConvert.DeserializeObject<List<Photo>>(photos);
+                var listAlbum = JsonSerializer.Deserialize<List<Album>>(albums);
+                var listPhotos = JsonSerializer.Deserialize<List<Photo>>(photos);
 
-
-                var albumDetails = from album in listAlbum
-                                   join photo in listPhotos
-                                   on album.Id equals photo.AlbumId
-                                   select new AlbumDetails
-                                   {
-                                       AlbumTitle = album.Title,
-                                       UserId = album.UserId,
-                                       PhotoTitle = photo.Title,
-                                       PhotoUrl = photo.Url,
-                                       PhotoThumbNailUrl = photo.ThumbNailUrl
-                                   };
-
-                userAlbums = albumDetails?.Where(x => x.UserId == UserId).ToList();
-
-               
+                userAlbums = (from album in listAlbum
+                              join photo in listPhotos
+                              on album.Id equals photo.AlbumId
+                              select new AlbumDetails
+                              {
+                                  AlbumTitle = album.Title,
+                                  UserId = album.UserId,
+                                  PhotoTitle = photo.Title,
+                                  PhotoUrl = photo.Url,
+                                  PhotoThumbNailUrl = photo.ThumbNailUrl
+                              }).Where(x => x.UserId == UserId).ToList();
+            }
+            catch (HttpRequestException httpEx)
+            {
+                logger.LogError(httpEx, "An error occurred while fetching albums or photos.");
+                throw;
+            }
+            catch (JsonException jsonEx)
+            {
+                logger.LogError(jsonEx, "An error occurred while deserializing the response.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An unexpected error occurred.");
+                throw;
             }
 
             return userAlbums;

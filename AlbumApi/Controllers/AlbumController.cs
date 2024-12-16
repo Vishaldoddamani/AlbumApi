@@ -1,32 +1,23 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using AlbumApi.Models;
-using AlbumApi.Services;
+﻿using AlbumApi.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
-using AlbumApi.Entities;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 
 namespace AlbumApi.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]")]
     public class AlbumController : ControllerBase
 
     {
-
         private readonly ILogger<AlbumController> _logger;
-        private  IAlbumService _albumService { get; }
-        private IMapper _mapper { get; }
+        private readonly IAlbumService _albumService;
+        private readonly IMapper _mapper;
 
         public AlbumController(ILogger<AlbumController> logger, IAlbumService aLbumService, IMapper mapper)
         {
@@ -34,40 +25,6 @@ namespace AlbumApi.Controllers
             _albumService = aLbumService;
             _mapper = mapper;
         }
-
-
-        //[HttpGet("Get")]
-
-        //public async Task<ActionResult<List<Album>>> Get([FromQuery] string UserId)
-        //{
-        //    try
-        //    {
-        //        List<Album> responseBody = null;
-
-        //        using (var client = new HttpClient())
-        //        {
-
-        //            client.DefaultRequestHeaders.Accept.Clear();
-        //            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-        //            HttpResponseMessage response = await client.GetAsync("http://jsonplaceholder.typicode.com/albums");
-
-        //            response.EnsureSuccessStatusCode();
-
-        //            string responseString = await response.Content.ReadAsStringAsync();
-
-        //            responseBody = JsonSerializer.Deserialize<List<Album>>(responseString);
-
-
-        //        }
-        //        return Ok(responseBody);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //}
 
         #region "GetAlbumDetails"
 
@@ -79,7 +36,6 @@ namespace AlbumApi.Controllers
         /// <returns>List of albums for a particular UserId.</returns>
 
         [HttpGet("{UserId}", Name = "GetAlbumDetails")]
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -87,9 +43,6 @@ namespace AlbumApi.Controllers
         {
             try
             {
-                List<Album> listAlbum = null;
-                List<Photo> listPhotos = null;
-
                 if (UserId == null)
                 {
                     _logger.LogError("User ID is null");
@@ -108,20 +61,15 @@ namespace AlbumApi.Controllers
                     }
 
                     return Ok(userAlbums);
-
-                }    
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError("Exception occurred in Method GetFromNewtonJson");
+                _logger.LogError("Exception occurred in Method Get");
                 throw ex;
             }
+        }
 
-        } 
-        #endregion
-
-
-
-
+        #endregion "GetAlbumDetails"
     }
 }

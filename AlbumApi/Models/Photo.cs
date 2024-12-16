@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace AlbumApi.Models
 {
@@ -10,16 +6,17 @@ namespace AlbumApi.Models
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
+
         [JsonPropertyName("albumId")]
         public int AlbumId { get; set; }
+
         [JsonPropertyName("title")]
-        public string  Title { get; set; }
+        public string Title { get; set; }
+
         [JsonPropertyName("url")]
         public string Url { get; set; }
+
         [JsonPropertyName("thumbnailUrl")]
-        public string  ThumbNailUrl { get; set; }
-
-
-
+        public string ThumbNailUrl { get; set; }
     }
 }
