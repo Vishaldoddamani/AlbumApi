@@ -1,38 +1,20 @@
-using Xunit;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using AlbumApi.Controllers;
+using AlbumApi.Entities;
 using AlbumApi.Services;
-using Moq;
-using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using AlbumApi.Entities;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System.Collections.Generic;
+using Xunit;
 
 namespace MyAlbumXunitProject
 {
     public class AlbumUnitTest
     {
-
-
-        //public AlbumUnitTest()
-        //{
-        //    string[] args = null;
-        //    CreateHostBuilder(args).Build().Run();
-        //}
-
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //.ConfigureWebHostDefaults(webBuilder =>
-        //{
-        //    webBuilder.UseStartup<AlbumApi.Startup>();
-        //});
-
         [Fact]
         public async System.Threading.Tasks.Task TestUserIdIsNull()
         {
-
             var mockService = new Mock<IAlbumService>();
             var mockLogger = new Mock<ILogger<AlbumController>>();
             var mockMapper = new Mock<IMapper>();
@@ -40,62 +22,56 @@ namespace MyAlbumXunitProject
             int? UserId = null;
 
             var controller = new AlbumController(mockLogger.Object, mockService.Object, mockMapper.Object);
-            
-            IActionResult actionResult =await controller.Get(UserId);
+
+            IActionResult actionResult = await controller.Get(UserId);
 
             Assert.NotNull(actionResult);
-            Assert.Equal(actionResult.GetType(),typeof(BadRequestResult));
-            
+            Assert.Equal(actionResult.GetType(), typeof(BadRequestResult));
         }
 
         [Fact]
         public async System.Threading.Tasks.Task TestUserIdNotFound()
         {
-
             var mockService = new Mock<IAlbumService>();
             var mockLogger = new Mock<ILogger<AlbumController>>();
             var mockMapper = new Mock<IMapper>();
             int UserId = 0;
 
             var controller = new AlbumController(mockLogger.Object, mockService.Object, mockMapper.Object);
-            
+
             IActionResult actionResult = await controller.Get(UserId);
 
             Assert.NotNull(actionResult);
             Assert.Equal(actionResult.GetType(), typeof(NotFoundResult));
-
-
         }
-
 
         [Fact]
         public async System.Threading.Tasks.Task TestUserIdSuccess()
         {
-
             var mockService = new Mock<IAlbumService>();
             var mockLogger = new Mock<ILogger<AlbumController>>();
             var mockMapper = new Mock<IMapper>();
             int UserId = 1;
 
             List<AlbumDetails> albumDetails = new List<AlbumDetails>();
-            albumDetails.Add(new AlbumDetails { 
-                        AlbumTitle = "quidem molestiae enim",
-                        PhotoThumbNailUrl = "https://via.placeholder.com/150/92c952",
-                        PhotoTitle = "accusamus beatae ad facilis cum similique qui sunt",
-                        PhotoUrl = "https://via.placeholder.com/600/92c952",
-                        UserId = 1
-                 });
+            albumDetails.Add(new AlbumDetails
+            {
+                AlbumTitle = "quidem molestiae enim",
+                PhotoThumbNailUrl = "https://via.placeholder.com/150/92c952",
+                PhotoTitle = "accusamus beatae ad facilis cum similique qui sunt",
+                PhotoUrl = "https://via.placeholder.com/600/92c952",
+                UserId = 1
+            });
 
             var controller = new AlbumController(mockLogger.Object, mockService.Object, mockMapper.Object);
 
             _ = mockService.Setup(x => x.GetAlbumsAsync(UserId))
                 .ReturnsAsync(albumDetails);
 
-            IActionResult actionResult =  controller.Get(UserId).Result;
+            IActionResult actionResult = controller.Get(UserId).Result;
 
             var result = ((Microsoft.AspNetCore.Mvc.ObjectResult)actionResult).Value;
-            
-           
+
             Assert.NotNull(actionResult);
             Assert.Equal(actionResult.GetType(), typeof(OkObjectResult));
 
@@ -104,11 +80,6 @@ namespace MyAlbumXunitProject
             Assert.Equal(albumDetails[0].PhotoTitle, ((List<AlbumDetails>)result)[0].PhotoTitle);
             Assert.Equal(albumDetails[0].PhotoUrl, ((List<AlbumDetails>)result)[0].PhotoUrl);
             Assert.Equal(albumDetails[0].UserId, ((List<AlbumDetails>)result)[0].UserId);
-
-
         }
-
-
-
     }
 }

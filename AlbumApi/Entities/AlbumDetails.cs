@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AlbumApi.Entities
+﻿namespace AlbumApi.Entities
 {
     public class AlbumDetails
     {
@@ -12,6 +7,5 @@ namespace AlbumApi.Entities
         public string PhotoTitle { get; set; }
         public string PhotoUrl { get; set; }
         public string PhotoThumbNailUrl { get; set; }
-
     }
 }

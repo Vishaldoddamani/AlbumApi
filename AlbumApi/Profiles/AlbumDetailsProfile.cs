@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AlbumApi.Entities;
 using AlbumApi.Services;
-using AlbumApi.Entities;
+using AutoMapper;
 
 namespace AlbumApi.Profiles
 {
