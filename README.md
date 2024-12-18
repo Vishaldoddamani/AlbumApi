@@ -49,9 +49,9 @@ docker build -t albumapi .
 Run the Docker container:
 
 docker run -p 8080:80 albumapi
-API Endpoints
-GET /api/albums - Retrieve all albums
-GET /api/albums/{id} - Retrieve a specific album by ID
-POST /api/albums - Create a new album
-PUT /api/albums/{id} - Update an existing album
-DELETE /api/albums/{id} - Delete an album
+API Endpoints 
+/api/Album/{UserId} - Retrieve a specific album by ID 
+
+![Screenshot 2024-12-18 202829](https://github.com/user-attachments/assets/4fafe17f-bd33-4988-bdad-d2c6657a9bde)
+
+
