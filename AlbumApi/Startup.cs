@@ -1,3 +1,4 @@
+using AlbumApi.Helpers;
 using AlbumApi.Profiles;
 using AlbumApi.Services;
 using AutoMapper;
@@ -52,8 +53,9 @@ namespace AlbumApi
             IMapper mapper = mappingConfig.CreateMapper();
 
             services.AddSingleton(mapper);
-
-            services.AddTransient<IAlbumService, AlbumService>();
+            services.AddHttpClient();
+            services.AddScoped<IHttpClientHelper, HttpClientHelper>();
+            services.AddScoped<IAlbumService, AlbumService>();
 
 
         }

@@ -53,7 +53,7 @@ namespace MyAlbumXunitProject
             var mockMapper = new Mock<IMapper>();
             int UserId = 1;
 
-            List<AlbumDetails> albumDetails = new List<AlbumDetails>();
+            List<AlbumDetails> albumDetails = new();
             albumDetails.Add(new AlbumDetails
             {
                 AlbumTitle = "quidem molestiae enim",

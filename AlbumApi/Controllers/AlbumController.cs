@@ -12,19 +12,11 @@ namespace AlbumApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AlbumController : ControllerBase
+    public class AlbumController(ILogger<AlbumController> logger,
+        IAlbumService aLbumService,
+        IMapper mapper) : ControllerBase
 
     {
-        private readonly ILogger<AlbumController> _logger;
-        private readonly IAlbumService _albumService;
-        private readonly IMapper _mapper;
-
-        public AlbumController(ILogger<AlbumController> logger, IAlbumService aLbumService, IMapper mapper)
-        {
-            _logger = logger;
-            _albumService = aLbumService;
-            _mapper = mapper;
-        }
 
         #region "GetAlbumDetails"
 
@@ -45,15 +37,15 @@ namespace AlbumApi.Controllers
             {
                 if (UserId == null)
                 {
-                    _logger.LogError("User ID is null");
+                    logger.LogError("User ID is null");
 
                     return BadRequest();
                 }
                 else
                 {
-                    var userAlbums = await _albumService.GetAlbumsAsync(UserId);
+                    var userAlbums = await aLbumService.GetAlbumsAsync(UserId);
 
-                    var mappedAlbum = _mapper.Map<List<AlbumDetailsDTO>>(userAlbums);
+                    var mappedAlbum = mapper.Map<List<AlbumDetailsDTO>>(userAlbums);
 
                     if (userAlbums == null)
                     {
@@ -65,7 +57,7 @@ namespace AlbumApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Exception occurred in Method Get");
+                logger.LogError("Exception occurred in Method Get");
                 throw ex;
             }
         }

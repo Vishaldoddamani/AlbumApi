@@ -4,23 +4,12 @@ using System.Text.Json.Serialization;
 
 namespace AlbumApi.Models
 {
-    public class Album
+    public record Album(
+       [property: JsonPropertyName("id")] int Id,
+       [property: Required, JsonPropertyName("userId")] int UserId,
+       [property: JsonPropertyName("title")] string Title,
+       List<Photo> Photos = null)
     {
-        public List<Photo> Photos { get; set; }
-
-        public Album()
-        {
-            Photos = new List<Photo>();
-        }
-
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-
-        [Required]
-        [JsonPropertyName("userId")]
-        public int UserId { get; set; }
-
-        [JsonPropertyName("title")]
-        public string Title { get; set; }
+        public Album() : this(0, 0, string.Empty, new List<Photo>()) { }
     }
 }

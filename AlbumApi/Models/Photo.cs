@@ -2,21 +2,10 @@
 
 namespace AlbumApi.Models
 {
-    public class Photo
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-
-        [JsonPropertyName("albumId")]
-        public int AlbumId { get; set; }
-
-        [JsonPropertyName("title")]
-        public string Title { get; set; }
-
-        [JsonPropertyName("url")]
-        public string Url { get; set; }
-
-        [JsonPropertyName("thumbnailUrl")]
-        public string ThumbNailUrl { get; set; }
-    }
+    public record Photo(
+    [property: JsonPropertyName("id")] int Id,
+    [property: JsonPropertyName("albumId")] int AlbumId,
+    [property: JsonPropertyName("title")] string Title,
+    [property: JsonPropertyName("url")] string Url,
+    [property: JsonPropertyName("thumbnailUrl")] string ThumbNailUrl);
 }
