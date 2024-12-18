@@ -31,7 +31,7 @@ namespace AlbumApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Get([FromQuery] int? UserId)
+        public async Task<IActionResult> Get([FromQuery] int? UserNumber)
         {
             try
             {
