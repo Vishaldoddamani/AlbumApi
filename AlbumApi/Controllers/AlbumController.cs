@@ -1,6 +1,5 @@
 ﻿using AlbumApi.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,11 +11,19 @@ namespace AlbumApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AlbumController(ILogger<AlbumController> logger,
-        IAlbumService aLbumService,
-        IMapper mapper) : ControllerBase
+    public class AlbumController : ControllerBase
 
     {
+        private readonly ILogger<AlbumController> _logger;
+        private readonly IAlbumService _albumService;
+        private readonly IMapper _mapper;
+
+        public AlbumController(ILogger<AlbumController> logger, IAlbumService aLbumService, IMapper mapper)
+        {
+            _logger = logger;
+            _albumService = aLbumService;
+            _mapper = mapper;
+        }
 
         #region "GetAlbumDetails"
 
@@ -28,24 +35,21 @@ namespace AlbumApi.Controllers
         /// <returns>List of albums for a particular UserId.</returns>
 
         [HttpGet("{UserId}", Name = "GetAlbumDetails")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Get([FromQuery] int? UserNumber)
+        public async Task<IActionResult> Get([FromQuery] int? UserId)
         {
             try
             {
                 if (UserId == null)
                 {
-                    logger.LogError("User ID is null");
+                    _logger.LogError("User ID is null");
 
                     return BadRequest();
                 }
                 else
                 {
-                    var userAlbums = await aLbumService.GetAlbumsAsync(UserId);
+                    var userAlbums = await _albumService.GetAlbumsAsync(UserId);
 
-                    var mappedAlbum = mapper.Map<List<AlbumDetailsDTO>>(userAlbums);
+                    var mappedAlbum = _mapper.Map<List<AlbumDetailsDTO>>(userAlbums);
 
                     if (userAlbums == null)
                     {
@@ -57,7 +61,7 @@ namespace AlbumApi.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError("Exception occurred in Method Get");
+                _logger.LogError("Exception occurred in Method Get");
                 throw ex;
             }
         }
